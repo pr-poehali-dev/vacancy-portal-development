@@ -6,12 +6,15 @@ import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Icon from '@/components/ui/icon'
+import ChatWidget from '@/components/ChatWidget'
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedSalary, setSelectedSalary] = useState('')
   const [selectedExperience, setSelectedExperience] = useState('')
   const [selectedLocation, setSelectedLocation] = useState('')
+  const [chatOpen, setChatOpen] = useState(false)
+  const [selectedEmployer, setSelectedEmployer] = useState('')
 
   const mockJobs = [
     {
@@ -267,10 +270,22 @@ const Index = () => {
                     </div>
                     <div className="text-right space-y-2">
                       <div className="text-sm text-jobGray-500">Опыт: {job.experience}</div>
-                      <Button className="bg-gradient-to-r from-jobBlue to-jobGreen hover:from-jobBlue/90 hover:to-jobGreen/90 text-white px-6 py-2 rounded-lg shadow-md hover:shadow-lg transition-all">
-                        <Icon name="Send" className="mr-2" size={16} />
-                        Откликнуться
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          className="bg-gradient-to-r from-jobBlue to-jobGreen hover:from-jobBlue/90 hover:to-jobGreen/90 text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all"
+                          onClick={() => {
+                            setSelectedEmployer(job.company)
+                            setChatOpen(true)
+                          }}
+                        >
+                          <Icon name="MessageCircle" className="mr-2" size={16} />
+                          Чат
+                        </Button>
+                        <Button variant="outline" className="border-jobBlue text-jobBlue hover:bg-jobBlue hover:text-white px-4 py-2">
+                          <Icon name="Send" className="mr-2" size={16} />
+                          Резюме
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -491,6 +506,32 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {/* Floating Chat Button */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <Button
+          className="bg-gradient-to-r from-jobBlue to-jobGreen hover:from-jobBlue/90 hover:to-jobGreen/90 text-white rounded-full w-16 h-16 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110"
+          onClick={() => {
+            setSelectedEmployer('JobSpace Support')
+            setChatOpen(true)
+          }}
+        >
+          <div className="relative">
+            <Icon name="MessageCircle" size={24} />
+            <div className="absolute -top-1 -right-1 bg-jobRed text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              3
+            </div>
+          </div>
+        </Button>
+      </div>
+
+      {/* Chat Widget */}
+      <ChatWidget
+        isOpen={chatOpen}
+        onClose={() => setChatOpen(false)}
+        recipientName={selectedEmployer || 'HR Менеджер'}
+        recipientRole="employer"
+      />
     </div>
   )
 }
