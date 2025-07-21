@@ -7,6 +7,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Icon from '@/components/ui/icon'
 import ChatWidget from '@/components/ChatWidget'
+import JobAnalytics from '@/components/JobAnalytics'
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -15,6 +16,7 @@ const Index = () => {
   const [selectedLocation, setSelectedLocation] = useState('')
   const [chatOpen, setChatOpen] = useState(false)
   const [selectedEmployer, setSelectedEmployer] = useState('')
+  const [analyticsOpen, setAnalyticsOpen] = useState(false)
 
   const mockJobs = [
     {
@@ -416,11 +418,16 @@ const Index = () => {
                     <Badge className="ml-auto bg-jobRed text-white">15</Badge>
                   </div>
                   
-                  <div className="flex items-center p-4 bg-jobBlue/5 rounded-lg">
+                  <div className="flex items-center p-4 bg-jobBlue/5 rounded-lg cursor-pointer hover:bg-jobBlue/10 transition-colors"
+                       onClick={() => setAnalyticsOpen(true)}>
                     <Icon name="TrendingUp" className="mr-3 text-jobBlue" size={24} />
-                    <div>
+                    <div className="flex-1">
                       <h4 className="font-semibold text-jobGray-900">Аналитика</h4>
                       <p className="text-sm text-jobGray-600">Эффективность ваших вакансий</p>
+                    </div>
+                    <div className="text-right">
+                      <Badge className="bg-jobBlue text-white text-xs">3247 👀</Badge>
+                      <div className="text-xs text-jobGray-500 mt-1">Всего просмотров</div>
                     </div>
                   </div>
                 </div>
@@ -531,6 +538,12 @@ const Index = () => {
         onClose={() => setChatOpen(false)}
         recipientName={selectedEmployer || 'HR Менеджер'}
         recipientRole="employer"
+      />
+
+      {/* Analytics Widget */}
+      <JobAnalytics
+        isOpen={analyticsOpen}
+        onClose={() => setAnalyticsOpen(false)}
       />
     </div>
   )
